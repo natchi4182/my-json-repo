@@ -26,7 +26,8 @@
 </head>
 <body>
   <h1>骨筋肉占い</h1>
-  <p>性別、星座、干支を入力して「占う」ボタンを押してください。</p>
+  <p>性別、星座、干支を選択し、「占う」ボタンを押してください。<br>
+     ※占い結果は「今日の日付」と「現在の時刻」に基づいて決定されます。</p>
 
   <form id="fortuneForm">
     <div>
@@ -80,12 +81,61 @@
 
   <script>
     function fortune() {
-      // ユーザー入力（今回は結果には影響しませんが、取得例として）
+      // ユーザー入力の取得
       var gender = document.getElementById('gender').value;
       var zodiac = document.getElementById('zodiac').value;
       var eto = document.getElementById('eto').value;
       
-      // 骨と筋肉の候補（必要に応じて追加・変更してください）
+      // 現在の日付・時刻を取得
+      var now = new Date();
+      var year   = now.getFullYear();
+      var month  = now.getMonth() + 1; // 0～11なので+1
+      var day    = now.getDate();
+      var hour   = now.getHours();
+      var minute = now.getMinutes();
+      var second = now.getSeconds();
+
+      // ユーザー入力を数値に変換
+      var genderValue = (gender === 'male') ? 1 : (gender === 'female') ? 2 : 3;
+      
+      var zodiacValue;
+      switch(zodiac) {
+        case 'aries': zodiacValue = 1; break;
+        case 'taurus': zodiacValue = 2; break;
+        case 'gemini': zodiacValue = 3; break;
+        case 'cancer': zodiacValue = 4; break;
+        case 'leo': zodiacValue = 5; break;
+        case 'virgo': zodiacValue = 6; break;
+        case 'libra': zodiacValue = 7; break;
+        case 'scorpio': zodiacValue = 8; break;
+        case 'sagittarius': zodiacValue = 9; break;
+        case 'capricorn': zodiacValue = 10; break;
+        case 'aquarius': zodiacValue = 11; break;
+        case 'pisces': zodiacValue = 12; break;
+        default: zodiacValue = 0;
+      }
+      
+      var etoValue;
+      switch(eto) {
+        case 'rat': etoValue = 1; break;
+        case 'ox': etoValue = 2; break;
+        case 'tiger': etoValue = 3; break;
+        case 'rabbit': etoValue = 4; break;
+        case 'dragon': etoValue = 5; break;
+        case 'snake': etoValue = 6; break;
+        case 'horse': etoValue = 7; break;
+        case 'goat': etoValue = 8; break;
+        case 'monkey': etoValue = 9; break;
+        case 'rooster': etoValue = 10; break;
+        case 'dog': etoValue = 11; break;
+        case 'boar': etoValue = 12; break;
+        default: etoValue = 0;
+      }
+      
+      // 日付・時刻の各数値とユーザー入力の数値を合算してシードを作成
+      var seed = year + month + day + hour + minute + second + genderValue + zodiacValue + etoValue;
+      
+      // 骨と筋肉の候補
       var bones = [
         "頑丈な大腿骨",
         "しなやかな脊椎",
@@ -101,15 +151,21 @@
         "驚異の三角筋"
       ];
       
-      // ランダムな選択
-      var boneResult = bones[Math.floor(Math.random() * bones.length)];
-      var muscleResult = muscles[Math.floor(Math.random() * muscles.length)];
+      // シード値を用いて各配列から選択
+      var boneIndex = seed % bones.length;
+      // 筋肉はシードに1を足して別のインデックスに（結果が同じにならないように）
+      var muscleIndex = (seed + 1) % muscles.length;
       
       // 結果表示
       var resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "<h2>占い結果</h2>" +
-                            "<p>あなたの骨は「" + boneResult + "」です。</p>" +
-                            "<p>あなたの筋肉は「" + muscleResult + "」です。</p>";
+                            "<p>日付: " + year + "年" + month + "月" + day + "日</p>" +
+                            "<p>時刻: " + hour + "時" + minute + "分" + second + "秒</p>" +
+                            "<p>性別: " + (gender === 'male' ? '男性' : (gender === 'female' ? '女性' : 'その他')) + "</p>" +
+                            "<p>星座: " + document.querySelector('#zodiac option:checked').textContent + "</p>" +
+                            "<p>干支: " + document.querySelector('#eto option:checked').textContent + "</p>" +
+                            "<p>あなたの骨は「" + bones[boneIndex] + "」です。</p>" +
+                            "<p>あなたの筋肉は「" + muscles[muscleIndex] + "」です。</p>";
     }
   </script>
 </body>
