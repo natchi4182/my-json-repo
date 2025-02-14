@@ -27,7 +27,7 @@
 <body>
   <h1>骨筋肉占い</h1>
   <p>性別、星座、干支を選択し、「占う」ボタンを押してください。<br>
-     ※占い結果は「今日の日付」と「現在の時刻」に基づいて決定されます。</p>
+     ※占い結果は「今日の日付」と「現在の時刻（時のみ）」に基づいて決定されます。</p>
 
   <form id="fortuneForm">
     <div>
@@ -86,14 +86,12 @@
       var zodiac = document.getElementById('zodiac').value;
       var eto = document.getElementById('eto').value;
       
-      // 現在の日付・時刻を取得
+      // 現在の日付・時刻を取得（分と秒は考慮しない）
       var now = new Date();
-      var year   = now.getFullYear();
-      var month  = now.getMonth() + 1; // 0～11なので+1
-      var day    = now.getDate();
-      var hour   = now.getHours();
-      var minute = now.getMinutes();
-      var second = now.getSeconds();
+      var year  = now.getFullYear();
+      var month = now.getMonth() + 1;
+      var day   = now.getDate();
+      var hour  = now.getHours();
 
       // ユーザー入力を数値に変換
       var genderValue = (gender === 'male') ? 1 : (gender === 'female') ? 2 : 3;
@@ -132,35 +130,74 @@
         default: etoValue = 0;
       }
       
-      // 日付・時刻の各数値とユーザー入力の数値を合算してシードを作成
-      var seed = year + month + day + hour + minute + second + genderValue + zodiacValue + etoValue;
+      // 日付・時刻（時のみ）とユーザー入力の数値を合算してシードを作成
+      var seed = year + month + day + hour + genderValue + zodiacValue + etoValue;
       
-      // 骨と筋肉の候補
+      // 骨の候補（24個）
       var bones = [
         "頑丈な大腿骨",
         "しなやかな脊椎",
         "強固な鎖骨",
         "神秘的な肋骨",
-        "しっかりした腕の骨"
+        "しっかりした上腕骨",
+        "華麗な橈骨",
+        "優美な尺骨",
+        "美しい手根骨",
+        "雄大な脛骨",
+        "優雅な腓骨",
+        "神聖な指骨",
+        "古代の寛骨",
+        "輝く頭蓋骨",
+        "柔軟な胸骨",
+        "勇敢な膝蓋骨",
+        "堅牢な下顎骨",
+        "光輝く肩甲骨",
+        "静謐な尾骨",
+        "風格ある頬骨",
+        "洗練されたあぶみ骨",
+        "大地を感じる踵骨",
+        "神々しい鼻骨",
+        "奇跡の距骨",
+        "未来を拓く舌骨"
       ];
+      
+      // 筋肉の候補（24個）
       var muscles = [
         "逞しい大胸筋",
-        "引き締まった腹筋",
+        "引き締まった腹直筋",
         "力強い大腿四頭筋",
         "しなやかな上腕二頭筋",
-        "驚異の三角筋"
+        "驚異の三角筋",
+        "雄々しい広背筋",
+        "躍動する前鋸筋",
+        "柔軟な大内転筋",
+        "発達した僧帽筋",
+        "鋭敏な腸腰筋",
+        "躍動感あふれる大臀筋",
+        "力強い下腿三頭筋",
+        "繊細な小円筋",
+        "洗練された側頭筋"
+        "勇猛な腕橈骨筋",
+        "静寂な脊柱起立筋",
+        "堅実な上腕三頭筋",
+        "雄大な大腿二頭筋",
+        "飛翔する外腹斜筋",
+        "調和の内腹斜筋",
+        "神秘の前脛骨筋",
+        "芸術的な胸鎖乳突筋",
+        "未来を創る菱形筋",
+        "古典的な肩甲下筋"
       ];
       
       // シード値を用いて各配列から選択
       var boneIndex = seed % bones.length;
-      // 筋肉はシードに1を足して別のインデックスに（結果が同じにならないように）
       var muscleIndex = (seed + 1) % muscles.length;
       
       // 結果表示
       var resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "<h2>占い結果</h2>" +
                             "<p>日付: " + year + "年" + month + "月" + day + "日</p>" +
-                            "<p>時刻: " + hour + "時" + minute + "分" + second + "秒</p>" +
+                            "<p>時刻: " + hour + "時</p>" +
                             "<p>性別: " + (gender === 'male' ? '男性' : (gender === 'female' ? '女性' : 'その他')) + "</p>" +
                             "<p>星座: " + document.querySelector('#zodiac option:checked').textContent + "</p>" +
                             "<p>干支: " + document.querySelector('#eto option:checked').textContent + "</p>" +
