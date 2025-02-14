@@ -196,13 +196,8 @@
       // 結果表示
       var resultDiv = document.getElementById('result');
       resultDiv.innerHTML = "<h2>占い結果</h2>" +
-                            "<p>日付: " + year + "年" + month + "月" + day + "日</p>" +
-                            "<p>時刻: " + hour + "時</p>" +
-                            "<p>性別: " + (gender === 'male' ? '男性' : (gender === 'female' ? '女性' : 'その他')) + "</p>" +
-                            "<p>星座: " + document.querySelector('#zodiac option:checked').textContent + "</p>" +
-                            "<p>干支: " + document.querySelector('#eto option:checked').textContent + "</p>" +
-                            "<p>あなたの骨は「" + bones[boneIndex] + "」です。</p>" +
-                            "<p>あなたの筋肉は「" + muscles[muscleIndex] + "」です。</p>";
+                            "<p>今日のあなたの骨は「" + bones[boneIndex] + "」です。</p>" +
+                            "<p>今日のあなたの筋肉は「" + muscles[muscleIndex] + "」です。</p>";
     }
   </script>
 </body>
